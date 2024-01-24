@@ -8,7 +8,7 @@ some runtime and configuration information.
 ## Features
 
 * Web based
-* Runs in Python 2.7
+* Runs in Python 3.x
 * Lightweight requirements
 * Search for keys using patterns
 * Delete single keys
@@ -19,7 +19,7 @@ some runtime and configuration information.
 
 Execute this:
 
-    git clone https://github.com/marians/rebrow.git
+    git clone https://github.com/suhailvs/rebrow.git
     cd rebrow
     virtualenv venv
     source venv/bin/activate

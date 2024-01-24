@@ -1,6 +1,7 @@
 # encoding: utf8
 
-from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash, Markup, Response, json
+from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash, Response, json
+from markupsafe import Markup
 import redis
 import time
 from datetime import datetime, timedelta
@@ -197,7 +198,7 @@ def keys(host, port, db):
             duration=time.time()-s)
 
 
-@app.route("/<host>:<int:port>/<int:db>/keys/<key>/")
+@app.route("/<host>:<int:port>/<int:db>/keys/b<key>/")
 def key(host, port, db, key):
     """
     Show a specific key.
@@ -214,6 +215,7 @@ def key(host, port, db, key):
     size = len(dump)
     del dump
     t = r.type(key)
+    t = t.decode('utf8')
     ttl = r.pttl(key)
     if t == "string":
         val = r.get(key).decode('utf-8', 'replace')
@@ -271,7 +273,8 @@ def pubsub_ajax(host, port, db):
 def urlsafe_base64_encode(s):
     if type(s) == 'Markup':
         s = s.unescape()
-    s = s.encode('utf8')
+    if type(s) != bytes:
+        s = s.encode('utf-8')
     s = base64.urlsafe_b64encode(s)
     return Markup(s)
 
